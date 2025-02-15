@@ -61,8 +61,22 @@ validacion_rangos_ip() {
         return 1
     fi
     
-    #Validar que la IP de inicio sea menor que la IP de fin
-    if [[ "$IP_INICIO" > "$IP_FIN" ]]; then
+    #Convertir IPs a números para compararlas
+    ip_to_num() {
+        local ip="$1"
+        local num=0
+        IFS='.' read -r -a octetos <<< "$ip"
+        for octeto in "${octetos[@]}"; do
+            num=$((num * 256 + octeto))
+        done
+        echo "$num"
+    }
+
+    local NUM_IP_INICIO=$(ip_to_num "$IP_INICIO")
+    local NUM_IP_FIN=$(ip_to_num "$IP_FIN")
+
+    # Validar que la IP de inicio sea menor que la IP de fin
+    if [ "$NUM_IP_INICIO" -ge "$NUM_IP_FIN" ]; then
         echo "La IP de inicio debe ser menor que la IP de fin."
         return 1
     fi
