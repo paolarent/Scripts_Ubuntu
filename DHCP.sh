@@ -4,7 +4,6 @@ echo "[-------------------_CONFIGURAR SERVIDOR DHCP EN UBUNTU SERVER_-----------
 IP=""
 RANGO_IP_INICIO=""
 RANGO_IP_FIN=""
-MASCARA=""
 
 #Función para validar la IP
 validacion_ip_correcta()
@@ -93,20 +92,13 @@ validacion_rangos_ip() {
     fi
 }    
 
-obtener_mascara() {
-    IFS='.' read -r octeto _ _ _ <<< "$1"
-
-    if (( octeto >= 0 && octeto <= 127 )); then
-        echo "255.0.0.0"      #Clase A (0.0.0.0 - 127.255.255.255)
-    elif (( octeto >= 128 && octeto <= 191 )); then
-        echo "255.255.0.0"    #Clase B (128.0.0.0 - 191.255.255.255)
-    elif (( octeto >= 192 && octeto <= 223 )); then
-        echo "255.255.255.0"  #Clase C (192.0.0.0 - 223.255.255.255)
-    else
-        echo "Máscara no válida para redes públicas"
-        return 1
-        exit 1  #Detener el script si la máscara no es válida
-    fi
+obtener_subred_y_mascara() {
+    local IP_INICIO="$1"
+    local RESULT
+    RESULT=$(ipcalc -n -m "$IP_INICIO/24")
+    local SUBRED=$(echo "$RESULT" | awk '/Network/ {print $2}')
+    local MASCARA=$(echo "$RESULT" | awk '/Netmask/ {print $2}')
+    echo "$SUBRED $MASCARA"
 }
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -134,8 +126,7 @@ while true; do
 done
 
 #Obtener los primeros tres octetos de la IP
-PRIMEROS_TRES_OCTETOS=$(echo $IP | cut -d'.' -f1-3)
-MASCARA=$(obtener_mascara "$RANGO_IP_INICIO")       #Obtener la mascara de acuerdo al rango
+read SUBRED MASCARA <<< "$(obtener_subred_y_mascara "$RANGO_IP_INICIO")"
 
 #Configurar la IP estática
 ARCHIVO_NETPLAN="/etc/netplan/50-cloud-init.yaml"
@@ -179,11 +170,11 @@ max-lease-time 7200;
 ddns-update-style none;
 
 #CONFIGURACION DHCP RED INTERNA
-subnet $PRIMEROS_TRES_OCTETOS.0 netmask $MASCARA {
+subnet $SUBRED netmask $MASCARA {
 range $RANGO_IP_INICIO $RANGO_IP_FIN;
 default-lease-time 3600;
 max-lease-time 86400;
-option routers $PRIMEROS_TRES_OCTETOS.1;
+option routers ${SUBRED%.*}.1;
 option domain-name-servers 8.8.8.8;
 }
 
