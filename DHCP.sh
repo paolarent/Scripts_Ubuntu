@@ -125,8 +125,20 @@ while true; do
     fi
 done
 
-#Obtener los primeros tres octetos de la IP
-read SUBRED MASCARA <<< "$(obtener_subred_y_mascara "$RANGO_IP_INICIO")"
+#Obtenemos la subred y máscara
+result=$(obtener_subred_y_mascara "$RANGO_IP_INICIO")
+
+#Verificar que se haya obtenido correctamente
+if [ -z "$result" ]; then
+    echo "Error: no se pudo obtener la subred y máscara."
+    exit 1
+fi
+
+#Asignar las variables SUBRED y MASCARA
+read SUBRED MASCARA <<< "$result"
+#Verificamos que las variables SUBRED y MASCARA hayan sido asignadas correctamente
+echo "Subred: $SUBRED"
+echo "Máscara: $MASCARA"
 
 #Configurar la IP estática
 ARCHIVO_NETPLAN="/etc/netplan/50-cloud-init.yaml"
