@@ -137,7 +137,7 @@ done
 PRIMEROS_TRES_OCTETOS=$(echo $IP | cut -d'.' -f1-3)
 MASCARA=$(obtener_mascara "$RANGO_IP_INICIO")       #Obtener la mascara de acuerdo al rango
 
-Configurar la IP estática
+#Configurar la IP estática
 ARCHIVO_NETPLAN="/etc/netplan/50-cloud-init.yaml"
 ADAPTADOR2="enp0s8"  #Adaptador de red 2 (RED INTERNA)
 sudo bash -c "cat > $ARCHIVO_NETPLAN" <<EOL
@@ -194,5 +194,6 @@ echo "*** Configurando archivo dhcpd.conf ***"
 sudo service isc-dhcp-server restart
 sudo service isc-dhcp-server status
 
+echo "CONFIGURACION FINALIZADA EXITOSAMENTE :)"
 #CHECAR LOS LEASES (las ip que ya asigno)
 #cat /var/lib/dhcp/dhcpd.leases
