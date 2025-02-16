@@ -135,7 +135,6 @@ done
 
 #Obtener los primeros tres octetos de la IP
 PRIMEROS_TRES_OCTETOS=$(echo $IP | cut -d'.' -f1-3)
-PRIMER_OCTETO=$(echo $IP | cut -d'.' -f1)
 MASCARA=$(obtener_mascara "$RANGO_IP_INICIO")       #Obtener la mascara de acuerdo al rango
 
 #Configurar la IP estática
@@ -180,7 +179,7 @@ max-lease-time 7200;
 ddns-update-style none;
 
 #CONFIGURACION DHCP RED INTERNA
-subnet $PRIMER_OCTETO.0.0.0 netmask $MASCARA {
+subnet $PRIMEROS_TRES_OCTETOS.0 netmask 255.255.255.0 {
 range $RANGO_IP_INICIO $RANGO_IP_FIN;
 default-lease-time 3600;
 max-lease-time 86400;
