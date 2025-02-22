@@ -9,6 +9,7 @@ pedir_IP(){
         validacion_ip_correcta "$ip"
         #Si la IP es válida (return 0), salimos del bucle
         if [ $? -eq 0 ]; then
+            echo "$ip"  #Retornar la IP válida
             break
         fi
     done
