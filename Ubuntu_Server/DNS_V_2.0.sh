@@ -2,7 +2,7 @@
 echo "*********_CONFIGURAR DNS EN UBUNTU SERVER_************"
 
 #Importar las funciones desde sus archivos
-source ./Funciones/F_Perdir_IP.sh
+source ./Funciones/F_Pedir_IP.sh
 source ./Funciones/F_Validar_IP.sh
 source ./Funciones/F_Ped_Val_Dominio_DNS.sh
 source ./Funciones/F_IP_Estatica.sh
