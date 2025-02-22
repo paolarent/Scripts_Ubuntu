@@ -116,7 +116,7 @@ echo "Aplicando cambios..."
 
 #INSTALAR BIND9 con sus herramientas y archivos
 sudo apt update    #actualizar paquetes
-sudo apt-get install bind9 bind9utils bind9-doc
+sudo apt-get install -y bind9 bind9utils bind9-doc
 echo "Instalando BIND9..."
 
 #CONFIGURACION DE BIND9
