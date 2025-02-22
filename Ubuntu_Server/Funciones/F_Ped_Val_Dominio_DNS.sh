@@ -36,6 +36,6 @@ validacion_dominio()
         return 1
     fi
 
-    echo "Okay, el dominio es válido..."
+    echo "$dominio" #Devuelvo el dominio ingresado
     return 0
 }

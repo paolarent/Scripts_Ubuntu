@@ -35,6 +35,6 @@ validacion_ip_correcta()
         return 1
     fi
 
-    echo "Okay, la IP ingresada es válida..."
+    echo "$ip"  #Devuelve la IP ingresada
     return 0
 }

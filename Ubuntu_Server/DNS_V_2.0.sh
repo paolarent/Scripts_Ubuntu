@@ -9,10 +9,10 @@ source ./Funciones/F_IP_Estatica.sh
 source ./Funciones/F_Config_DNS.sh
 
 #Pedir y validar la IP
-pedir_IP
+ip=$(pedir_IP)
 
 #Pedir y validar el dominio
-pedir_dominio
+dominio=$(pedir_dominio)
 
 #Configurar la IP estática
 configurar_ip_estatica "$ip"
